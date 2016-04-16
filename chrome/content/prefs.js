@@ -49,6 +49,10 @@
 		prefs.setCharPref("extensions.bitTorrentWebUI.serverPath", path);
 	}
 
+	Prefs.setServerAddress = function( ip ) {
+		prefs.setCharPref("extensions.bitTorrentWebUI.serverAddress", ip);
+	}
+
 	Prefs.getServerPort = function() {
 		try {
 			var checkPortVal = parseInt( prefs.getCharPref("extensions.bitTorrentWebUI.serverPort") );

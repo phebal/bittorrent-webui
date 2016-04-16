@@ -33,7 +33,28 @@ BTWebUI.Dispatcher = function () {
 	this.setData = function( aData ) { this.mData = aData; };
 
 	this.getWebUIAddress = function() {
-		var strPath = Prefs.getServerScheme() + Prefs.getServerAddress() +	Prefs.getServerPort()
+		var strPath = Prefs.getServerScheme() + Prefs.getServerAddress() +	Prefs.getServerPort();
+    var request = new XMLHttpRequest();
+    request.open('GET', strPath, false, null, null);
+    try {
+      request.send();
+    } catch(e) {}
+
+    if (request.status != 200) {
+      var idx;
+      for (i = 1; i < 10; i++) {
+        strPath = strPath.replace(/[0-9]:/, i + ':');
+        request.open('GET', strPath, false, null, null);
+        try {
+          request.send();
+        } catch(e) {}
+        if (request.status == 200) {
+          var ip = Prefs.getServerAddress().replace(/[0-9]$/, i);
+          Prefs.setServerAddress(ip);
+          break;
+        }
+      }
+    }
 		if( Prefs.getServerPath() != "" ) {
 			strPath = strPath + "/" + Prefs.getServerPath();
 		}
